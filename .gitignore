@@ -19,3 +19,7 @@
 
 # Editor swap files
 *.swp
+
+# Binaries/object files
+bin
+obj
