@@ -69,8 +69,7 @@ a lot of processor time but works sufficiently faster than code with mutex.
         CFLAGS=-D_USE_ATOMIC make bin/syncint
 
 * transaction - brand-new technology which allow threads work concurrently until
-they not interact with the same memory region. Can be runner-up on Intel
-Haswell. Slow on usual hardware (probably due to transaction cancels - threads
-addresses one memory address all the time).
+they not interact with the same memory region. Slow in this example (probably
+due to transaction cancels - threads addresses one memory address all the time).
 
         CFLAGS=-D_USE_GTM make bin/syncint
