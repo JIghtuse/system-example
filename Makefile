@@ -1,7 +1,7 @@
 MKDIR := mkdir -p
-CFLAGS := -Wall -Werror -Wextra -pedantic-errors
-PROGS := bin/tmpfile
-OBJS := $(patsubst src/%.c, obj/%.o, $(wildcard src/*.c))
+CFLAGS += -Wall -Werror -Wextra -pedantic-errors
+PROGS := bin/tmpfile\
+         bin/syncint
 
 .PHONY: all clean
 
@@ -13,6 +13,10 @@ clean:
 	rm -rf bin/* obj/*
 
 bin/tmpfile : obj/tmpfile.o obj/rwall.o
+
+bin/syncint : obj/syncint.o
+bin/syncint : CFLAGS += -D_GNU_SOURCE
+bin/syncint : LDFLAGS += -pthread
 
 $(PROGS):
 	@$(MKDIR) $(dir $@)
