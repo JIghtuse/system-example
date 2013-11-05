@@ -38,7 +38,7 @@ To see 'hidden' file, one can:
 ###syncint
 
 Different synchronization approaches to protect shared resource (int variable).
-Based on AlexOnLinux [series on synchronization](http://www.alexonlinux.com/do-you-need-mutex-to-protect-int)
+Based on AlexOnLinux [series on synchronization](http://www.alexonlinux.com/do-you-need-mutex-to-protect-int).
 
 Do you need a mutex to protect an int?
 
@@ -70,6 +70,7 @@ a lot of processor time but works sufficiently faster than code with mutex.
 
 * transaction - brand-new technology which allow threads work concurrently until
 they not interact with the same memory region. Can be runner-up on Intel
-Haswell. Slow on usual hardware (probably due to runtime library overhead).
+Haswell. Slow on usual hardware (probably due to transaction cancels - threads
+addresses one memory address all the time).
 
         CFLAGS=-D_USE_GTM make bin/syncint
