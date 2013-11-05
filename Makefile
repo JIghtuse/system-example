@@ -15,7 +15,7 @@ clean:
 bin/tmpfile : obj/tmpfile.o obj/rwall.o
 
 bin/syncint : obj/syncint.o
-bin/syncint : CFLAGS += -D_GNU_SOURCE
+bin/syncint : CFLAGS += -D_GNU_SOURCE -fgnu-tm
 bin/syncint : LDFLAGS += -pthread
 
 $(PROGS):

@@ -6,10 +6,16 @@
 #include <unistd.h>
 
 enum {
-    INC_TO = 1000000
+    INC_TO = 10000000
 };
 
 int global_int;
+
+#if defined _USE_MUTEX
+pthread_mutex_t mutex;
+#elif defined _USE_SPIN
+pthread_spinlock_t spinlock;
+#endif
 
 pid_t gettid(void)
 {
@@ -31,7 +37,23 @@ void *incrementer(void *arg)
     }
 
     for (i = 0; i < INC_TO; i++) {
+#if defined _USE_ATOMIC
+        __sync_fetch_and_add(&global_int, 1);
+#elif defined _USE_GTM 
+        __transaction_atomic {
+            global_int++;
+        }
+#elif defined _USE_MUTEX
+        pthread_mutex_lock(&mutex);
         global_int++;
+        pthread_mutex_unlock(&mutex);
+#elif defined _USE_SPIN
+        pthread_spin_lock(&spinlock);
+        global_int++;
+        pthread_spin_unlock(&spinlock);
+#else
+        global_int++;
+#endif
     }
 
     return NULL;
@@ -53,6 +75,12 @@ int main(int argc, char *argv[])
         perror("sysconf");
         return 1;
     }
+
+#if defined _USE_MUTEX
+    pthread_mutex_init(&mutex, NULL);
+#elif defined _USE_SPIN
+    pthread_spin_init(&spinlock, 0);
+#endif
 
     threads = malloc(sizeof(pthread_t) * nproc);
     if (threads == NULL) {
@@ -77,5 +105,12 @@ int main(int argc, char *argv[])
 
     printf("global_int actual value:   %d\n", global_int);
     printf("global_int expected value: %d\n", (int)(INC_TO * nproc));
+
+#if defined _USE_MUTEX
+    pthread_mutex_destroy(&mutex);
+#elif defined _USE_SPIN
+    pthread_spin_destroy(&spinlock);
+#endif
+
     return 0;
 }
