@@ -11,10 +11,15 @@ Linux system programming examples
 
 ###largefile
 
-Utility creates empty file and enlarge it (up to ~15Tb) by seeking past its end
+Utility creates empty file and enlarge it (up to ~16Tb) by seeking past its end
 at large offset and writing one byte on this position. It creates new space
 between 0 and new length padded with zeros. Hole (zero padding) in Unix
 filesystems hole (zero padding) usually do not occupy any physical disk space.
+
+Program based on Robert Love's
+[Linux System Programming](http://shop.oreilly.com/product/0636920026891.do)
+(File I/O - Seeking with lseek() - Seeking Past the End of a File), but creates
+larger files.
 
 Usage:
 
