@@ -4,14 +4,27 @@ system-example
 Linux system programming examples
 
 ###Index
+* [largefile](#largefile)
 * [tmpfile](#tmpfile)
 * [syncint](#syncint)
 
 
+###largefile
+
+Utility creates empty file and enlarge it (up to ~15Tb) by seeking past its end
+at large offset and writing one byte on this position. It creates new space
+between 0 and new length padded with zeros. Hole (zero padding) in Unix
+filesystems hole (zero padding) usually do not occupy any physical disk space.
+
+Usage:
+
+    ./bin/largefile <new large file filename>
+
 ###tmpfile
 
 Secure temporary file creation (uses O\_TMPFILE). Requres Linux 3.11 or higher.  
-Partially based on [WillDignazio gist](https://gist.github.com/WillDignazio/6077679).
+Partially based on
+[WillDignazio gist](https://gist.github.com/WillDignazio/6077679).
 
 Program require root privileges to run (I could be wrong).
 
