@@ -5,13 +5,6 @@
 #include <sys/stat.h>
 #include "rwall.h"
 
-#ifndef __O_TMPFILE
-#define __O_TMPFILE	020000000
-#endif
-#define O_TMPFILE (__O_TMPFILE | O_DIRECTORY)
-#define O_TMPFILE_MASK (__O_TMPFILE | O_DIRECTORY | O_CREAT)      
-
-
 int main(int argc, char *argv[])
 {
     int fd;
@@ -23,7 +16,7 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    fd = open(".", O_TMPFILE | O_RDWR);
+    fd = open(".", O_TMPFILE | O_RDWR, S_IRUSR | S_IWUSR);
     if (fd == -1) {
         perror("open");
         return 1;
