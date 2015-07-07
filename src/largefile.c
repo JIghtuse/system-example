@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
     }
     fname = argv[1];
 
-    if (!create_large_file(fname, offset)) {
+    if (create_large_file(fname, offset) != -1) {
         off_t fsz = get_filesize(fname);
         printf("Success!\n");
         if (fsz > 0) {
@@ -34,22 +34,27 @@ int main(int argc, char *argv[])
 
 int create_large_file(char *fname, off64_t sz)
 {
-    int fd = open(fname, O_WRONLY | O_CREAT | O_LARGEFILE, 0644);
+    int retval = -1;
 
+    int fd = open(fname, O_WRONLY | O_CREAT | O_LARGEFILE, 0644);
     if (fd < 1) {
         perror("open");
-        return 1;
+        goto out;
     }
 
     if (lseek64(fd, sz, SEEK_END) < 1) {
         perror("lseek");
-        return 1;
+        goto out;
     }
 
     if (write(fd, "0", 1) < 1) {
         perror("write");
-        return 1;
+        goto out;
     }
-    close(fd);
-    return 0;
+
+    retval = 0;
+out:
+    if (fd > 0)
+        close(fd);
+    return retval;
 }
