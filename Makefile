@@ -1,5 +1,7 @@
 MKDIR := mkdir -p
 CFLAGS += -Wall -Werror -Wextra -pedantic-errors
+CFLAGS += -D_GNU_SOURCE
+
 PROGS := bin/tmpfile\
          bin/syncint\
 	 bin/largefile
@@ -11,21 +13,18 @@ all: build
 build: $(PROGS)
 
 clean:
-	rm -rf bin/* obj/*
+	rm -rf $(PROGS)
 
-bin/tmpfile : obj/tmpfile.o obj/rwall.o
+bin/tmpfile : tmpfile.c rwall.c
 
-bin/syncint : obj/syncint.o
-bin/syncint : CFLAGS += -D_GNU_SOURCE -fgnu-tm
+bin/syncint: syncint.c
+bin/syncint : CFLAGS += -fgnu-tm
 bin/syncint : LDFLAGS += -pthread
 
-bin/largefile : obj/largefile.o obj/files.o
-bin/largefile : CFLAGS += -D_GNU_SOURCE
+bin/largefile : tmpfile.c rwall.c rwall.h
 
 $(PROGS):
 	@$(MKDIR) $(dir $@)
-	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^
+	$(LINK.c) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
-obj/%.o : src/%.c
-	@$(MKDIR) $(dir $@)
-	$(CC) $(CFLAGS) -c -MD -o $@ $<
+VPATH += src
