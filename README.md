@@ -7,6 +7,7 @@ Linux system programming examples
 * [largefile](#largefile)
 * [tmpfile](#tmpfile)
 * [syncint](#syncint)
+* [ismounted](#ismounted)
 
 
 ###largefile
@@ -91,3 +92,21 @@ they not interact with the same memory region. Slow in this example (probably
 due to transaction cancels - threads addresses one memory address all the time).
 
         CFLAGS=-D_USE_GTM make bin/syncint
+
+###ismounted
+
+Sometimes there is a need to look for a specific entry in /etc/fstab or
+/etc/mtab files (See [mount(8)](http://man7.org/linux/man-pages/man8/mount.8.html)
+and [fstab(5)](http://man7.org/linux/man-pages/man5/fstab.5.html)). You can
+write your own parser for that, but it is simpler and reliable to just use
+handy routines described in [getmntent(3)](http://man7.org/linux/man-pages/man3/getmntent.3.html).
+This little example looks if specific device path presents in /etc/mtab and
+prints corresponding message.
+
+Usage example: 
+
+    ./bin/ismounted /dev/sda1
+
+Example output:
+
+    /dev/sda1 is mounted
