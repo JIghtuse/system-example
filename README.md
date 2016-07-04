@@ -8,6 +8,7 @@ Linux system programming examples
 * [tmpfile](#tmpfile)
 * [syncint](#syncint)
 * [ismounted](#ismounted)
+* [kill\_by\_pid\_file](#kill_by_pid_file)
 
 
 ###largefile
@@ -110,3 +111,12 @@ Usage example:
 Example output:
 
     /dev/sda1 is mounted
+
+###kill\_by\_pid\_file
+
+Daemons often create a pid file, which contains ID of daemon process. This
+utility can kill daemons using their pid files.
+
+Usage example:
+
+    ./bin/kill_by_pid_file /run/daemon.pid
