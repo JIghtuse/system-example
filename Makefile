@@ -5,7 +5,8 @@ CFLAGS += -D_GNU_SOURCE
 PROGS := bin/tmpfile\
          bin/syncint\
          bin/largefile\
-         bin/ismounted
+         bin/ismounted\
+         bin/kill_by_pid_file
 
 .PHONY: all clean
 
@@ -25,6 +26,8 @@ bin/syncint : LDFLAGS += -pthread
 bin/largefile : tmpfile.c rwall.c rwall.h
 
 bin/ismounted: ismounted.c
+
+bin/kill_by_pid_file: kill_by_pid_file.c
 
 $(PROGS):
 	@$(MKDIR) $(dir $@)
